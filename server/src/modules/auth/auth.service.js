@@ -68,5 +68,5 @@ const generateToken = (id) => {
       expiresIn: process.env.JWT_EXPIRES_IN || "1d",
       algorithm: "HS256" // Explicitly define algorithm
     }
-  );
-};
+    );
+  };

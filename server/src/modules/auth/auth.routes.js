@@ -7,7 +7,7 @@ import { loginUser, getUser, createUser } from "./auth.controller.js";
 
 // Middlewares
 import authMiddleware from "../../middleware/auth.middleware.js";
-// import { handleValidationErrors } from "../../middleware/error.middleware.js";
+import { handleValidationErrors } from "../../middleware/error.middleware.js";
 
 const router = express.Router();
 
@@ -34,7 +34,7 @@ router.post(
       .withMessage("Password must be at least 6 characters long")
       .matches(/\d/)
       .withMessage("Password must contain a number"),
-    // handleValidationErrors, // Custom middleware to catch and return errors
+    handleValidationErrors, // Custom middleware to catch and return errors
   ],
   createUser
 );
@@ -48,7 +48,7 @@ router.post(
   [
     body("email").isEmail().withMessage("Invalid credentials").normalizeEmail(),
     body("password").notEmpty().withMessage("Password is required"),
-    // handleValidationErrors,
+    handleValidationErrors,
   ],
   loginUser
 );

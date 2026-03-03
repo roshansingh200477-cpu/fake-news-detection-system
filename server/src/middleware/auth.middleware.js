@@ -27,12 +27,13 @@ const authMiddleware = async (req, res, next)=>{
                 message: "The user belong to this token is no longer exists",
             });
         }
-
         // attach user to request 
         req.user = user;
         // continue
         next();
     } catch(error){
+        console.log("JWT ERROR TYPE:", error.name);
+  console.log("JWT ERROR MESSAGE:", error.message);
         return res.status(401).json({
             success: false,
             message: "Invalid or expired token.",
