@@ -8,6 +8,7 @@ import authRoutes from "./modules/auth/auth.routes.js";
 import errorMiddleware from "./middleware/error.middleware.js";
 import { globalLimiter } from "./middleware/rateLimiter.middleware.js";
 import predictionRoutes from "./modules/prediction/prediction.routes.js";
+import newsRoutes from "../Routes/newRoutes.js";
 
 connectToMongo();
 
@@ -15,6 +16,13 @@ const app = express();
 const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
+
+// News Route 
+app.use("/api/news", newsRoutes);
+
+app.listen(5000, ()=>{
+    console.log("Server running on port 5000");
+})
 
 // Mount Prediction Routes
 app.use("/api/predictions", predictionRoutes);
