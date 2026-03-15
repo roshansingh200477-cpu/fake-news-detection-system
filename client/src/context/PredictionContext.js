@@ -7,15 +7,31 @@ export const PredictionProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   const detectNews = async (text) => {
+  try {
+
     setLoading(true);
-    try {
-      const res = await predictNews(text);
-      setResult(res.data);
-    } catch (error) {
-      console.error("Prediction failed");
-    }
+
+    const res = await predictNews({
+      type: "text",
+      content: text
+    });
+
+    // Normalize the response here
+    setResult({
+      prediction: res.data?.data?.result || "Unknown",
+      confidence: res.data?.data?.confidence || null
+    });
+
+  } catch (error) {
+
+    console.error("Prediction failed", error);
+
+  } finally {
+
     setLoading(false);
-  };
+
+  }
+};
   return (
     <PredictionContext.Provider value={{result, loading, detectNews}}>
       {children}

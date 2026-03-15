@@ -7,9 +7,11 @@ const API = axios.create({
 // Attach token automatically
 API.interceptors.request.use((req) => {
   const token = localStorage.getItem("token");
+  console.log("TOKEN SENT:", token);
   if (token) {
-    req.headers["auth-token"] = token;
+    req.headers.Authorization = `Bearer ${token}`;
   }
+  console.log("HEADERS:", req.headers);
   return req;
 
 });
@@ -31,5 +33,6 @@ export const loginUser = (data) => API.post("/api/auth/loginUser", data);
 export const getUser = () => API.get("/api/auth/getUser");
 
 // PREDICTION API
-export const predictNews = (text) =>
-  API.post("/api/news/predict", { text });
+export const predictNews = (data) =>
+  API.post("/api/predictions", data);
+

@@ -6,9 +6,15 @@ import DetectNews from './pages/DetectNews';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import { Routes, BrowserRouter, Route } from 'react-router-dom';
+import { useContext } from 'react';
+import { AuthContext } from './context/AuthContext';
 
 
 function App() {
+  const { loading } = useContext(AuthContext)
+  if(loading){
+    return <div>Loading...</div>
+  }
   return (
 // #0F172A
       <BrowserRouter>

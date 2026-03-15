@@ -4,7 +4,7 @@ const ML_API_URL = process.env.ML_API_URL;
 
 export const predictFakeNews = async (text)=>{
     try {
-        const response = await axios.post(ML_API_URL, {
+        const response = await axios.post(process.env.ML_API_URL, {
             text: text
         });
 

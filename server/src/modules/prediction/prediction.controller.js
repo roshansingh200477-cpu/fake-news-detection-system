@@ -10,6 +10,14 @@ export const createPrediction = async (req, res, next)=>{
         if(!type || !content){
             return apiResponse.error(res, "Type and content are required", 400);
         }
+        if (typeof content !== "string") {
+            return res.status(400).json({
+                success: false,
+                message: "Content must be a string"
+            });
+            }
+            console.log("REQ BODY:", req.body);
+console.log("CONTENT TYPE:", typeof req.body.content);
 
         // user come
         const userId = req.user._id;
