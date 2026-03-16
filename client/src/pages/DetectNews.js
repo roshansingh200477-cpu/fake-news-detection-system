@@ -8,7 +8,7 @@ const DetectNews = () => {
   const { user } = useContext(AuthContext);
 
   if(!user){
-    return <Navigate to="/Login" />
+    return <Navigate to="/SignUp" />
   }
   return (
     <div>

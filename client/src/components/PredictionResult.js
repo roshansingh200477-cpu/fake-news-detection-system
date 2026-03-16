@@ -42,7 +42,7 @@ const PredictionResult = () => {
             </div>
 
             {result.confidence && (
-                <p className="mt-3 text-gray-400">
+                <p className="mt-3 text-white-800">
                     Confidence: {(result.confidence * 100).toFixed(2)}%
                 </p>
             )}
