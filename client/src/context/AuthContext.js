@@ -52,9 +52,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (data) => {
 
     const res = await createUser(data);
-
     localStorage.setItem("token", res.data.token);
-
     setUser(res.data.user);
   };
 

@@ -26,7 +26,8 @@ export const register = async (userData) => {
   const userResponse = user.toObject();
   delete userResponse.password;
   
-  return userResponse;
+  const token = generateToken(user._id);
+  return { token, user:userResponse };
 };
 
 /**

@@ -42,6 +42,7 @@ const SignUp = () => {
   // 🔹 Handle Signup
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("SIGNUP SUBMITTED", form);
 
     if (form.password !== form.confirm) {
       alert("Passwords do not match");
