@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { login } = useContext(AuthContext);
@@ -100,9 +100,9 @@ const Login = () => {
           {/* Footer */}
           <p className="text-center text-sm text-gray-600 mt-6">
             Don't have an account?{" "}
-            <span className="text-cyan-400 hover:text-cyan-300 cursor-pointer transition-colors font-medium">
+            <Link to="/SignUp" className="text-cyan-400 hover:text-cyan-300 cursor-pointer transition-colors font-medium">
               Sign up
-            </span>
+            </Link>
           </p>
 
         </div>

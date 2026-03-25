@@ -9,7 +9,6 @@ import { Routes, BrowserRouter, Route } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 
-
 function App() {
   const { loading } = useContext(AuthContext)
   if(loading){

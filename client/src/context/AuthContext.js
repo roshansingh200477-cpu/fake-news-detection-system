@@ -7,11 +7,8 @@ export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
  const loadUser = async () => {
-
   const token = localStorage.getItem("token");
-
   if (!token) {
     setLoading(false);
     return;
@@ -23,9 +20,7 @@ export const AuthProvider = ({ children }) => {
     setUser(res.data);
 
   } catch (error) {
-
     console.log("AUTH ERROR:", error.response?.data);
-
     localStorage.removeItem("token");
     setUser(null);
 
@@ -33,19 +28,14 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }
 };
-
   useEffect(() => {
     loadUser();
   }, []);
 
   const login = async (data) => {
-
     const res = await loginUser(data);
-
     console.log("LOGIN RESPONSE:", res.data);
-
     localStorage.setItem("token", res.data.token);
-
     setUser(res.data.user);   // instant UI update
   };
 
@@ -55,7 +45,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", res.data.token);
     setUser(res.data.user);
   };
-
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);

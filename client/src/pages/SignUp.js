@@ -1,6 +1,6 @@
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const InputField = ({ label, type, placeholder, value, onChange, show, onToggle }) => (
   <div className="flex flex-col gap-1.5">
@@ -101,9 +101,9 @@ const SignUp = () => {
 
           <p className="text-center text-sm text-gray-600 mt-6">
             Already have an account?{" "}
-            <span className="text-emerald-400 hover:text-emerald-300 cursor-pointer transition-colors font-medium">
+            <Link to="/Login" className="text-emerald-400 hover:text-emerald-300 cursor-pointer transition-colors font-medium">
               Sign in
-            </span>
+            </Link>
           </p>
 
         </div>
