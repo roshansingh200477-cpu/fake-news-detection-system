@@ -1,35 +1,47 @@
+import axios from "axios";
 import Prediction from "./prediction.model.js";
 
-// Create Prediction 
-export const createPrediction = async (type, content, userId) =>{
+export const createPrediction = async (type, content, userId) => {
 
-    // convert everything into text 
     let processedText = content;
 
-    if(type === "url"){
-        // just saving the url as content right now
-        processedText = content;
+    if (!processedText || typeof processedText !== "string") {
+        throw new Error("Content must be a string");
     }
 
-    if(type === "text"){
-        processedText = content;
+    let result = "Unknown";
+    let confidence = null;
+
+    try {
+        // 🔥 CALL FASTAPI ML SERVICE
+        const response = await axios.post(process.env.ML_API_URL, {
+            text: processedText
+        });
+
+        console.log("ML RESPONSE:", response.data);
+
+        result = response.data.prediction;       // "Fake" or "Real"
+        confidence = response.data.confidence;   // e.g. 0.92
+
+    } catch (error) {
+        console.error("ML API ERROR:", error.message);
+
+        // fallback (optional)
+        const lowerText = processedText.toLowerCase();
+        const isFake = lowerText.includes("shocking") || lowerText.includes("breaking");
+        result = isFake ? "Fake" : "Real";
     }
 
-    // fake ML logic now temprory we will change later
-    const lowerText = processedText.toLowerCase();
-
-    const isFake = lowerText.includes("shocking") || lowerText.includes("breaking") || lowerText.includes("viral");
-    const result = isFake ? "Fake" : "Real";
-
-    // now we will save to the database
     const prediction = await Prediction.create({
-        user : userId,
+        user: userId,
         type,
         content: processedText,
         result,
+        confidence
     });
+
     return prediction;
-}
+};
 
 // Get User Prediction
 export const getUserPredictions = async(userId)=>{
