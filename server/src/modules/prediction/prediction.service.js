@@ -26,10 +26,55 @@ export const createPrediction = async (type, content, userId) => {
     } catch (error) {
         console.error("ML API ERROR:", error.message);
 
-        // fallback (optional)
+        // fallback keyword detection
         const lowerText = processedText.toLowerCase();
-        const isFake = lowerText.includes("shocking") || lowerText.includes("breaking");
-        result = isFake ? "Fake" : "Real";
+
+        const fakeSignals = [
+            // sensational / urgency
+            "breaking", "urgent", "shocking", "bombshell", "explosive",
+            "exclusive", "just in", "developing", "alert", "watch now",
+            // share bait
+            "share before deleted", "they don't want you to know",
+            "mainstream media won't show", "spread the word",
+            "share immediately", "before it's too late", "going viral",
+            "banned", "censored", "must watch", "must read",
+            "won't show you this", "before they delete",
+            // exaggeration
+            "what they're hiding", "cover up", "cover-up",
+            "hidden truth", "they exposed", "obliterate",
+            "savage", "rip apart", "slam",
+            // emotional triggers
+            "outrage", "disgusting", "traitor", "corrupt politician",
+            "rigged", "it's a hoax", "complete fraud", "criminal elite",
+            "radical agenda", "deep state", "puppet government",
+            "globalist", "regime", "invasion", "they are lying",
+            // fake credibility
+            "sources say", "insiders claim", "anonymous source confirms",
+            "many people are saying", "scientists confirm",
+            "according to sources close",
+            // conspiracy / clickbait
+            "illuminati", "new world order", "microchip",
+            "5g causes", "they are poisoning", "miracle cure",
+            "doctors don't want you", "big pharma hiding",
+            "secret society", "false flag", "crisis actor",
+            "staged attack", "government is hiding",
+            "you won't believe", "this will shock you",
+            "share with everyone you know", "wake up people",
+            "sheeple", "plandemic", "scamdemic",
+        ];
+
+        const realSignals = [
+            "reuters", "associated press", "according to officials",
+            "confirmed by", "said in a statement", "press conference",
+            "official statement", "spokesperson said",
+            "verified by", "fact checked", "peer reviewed",
+        ];
+
+        let fakeScore = fakeSignals.filter(signal => lowerText.includes(signal)).length;
+        let realScore = realSignals.filter(signal => lowerText.includes(signal)).length;
+
+        const netScore = fakeScore - realScore;
+        result = netScore >= 1 ? "Fake" : "Real";
     }
 
     const prediction = await Prediction.create({
