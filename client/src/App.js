@@ -8,6 +8,7 @@ import SignUp from './pages/SignUp';
 import { Routes, BrowserRouter, Route } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
+import Footer from './components/Footer';
 
 function App() {
   const { loading } = useContext(AuthContext)
@@ -26,6 +27,7 @@ function App() {
           <Route path='/Login' element={<Login/>} />
           <Route path='/SignUp' element={<SignUp/>} />
         </Routes>
+        <Footer/>
     </div>
       </BrowserRouter>
 
