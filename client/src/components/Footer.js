@@ -55,15 +55,44 @@ const Footer = () => {
 
             <div className="flex items-center gap-3">
 
-              {/* FIXED GitHub */}
+              {/* GitHub */}
               <a
-                href="https://github.com/roshansingh200477-cpu/fake-news-detection-system"
+                href="https://github.com/roshansingh200477-cpu"
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center hover:border-emerald-500/50 hover:bg-emerald-500/10 hover:text-emerald-400 transition-all duration-300"
+                className="w-9 h-9 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center hover:border-cyan-500/50 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all duration-300"
               >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504..." />
+                <svg
+                  className="w-4 h-4"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.303 3.438 9.8 8.205 
+      11.385.6.113.82-.258.82-.577 
+      0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61
+      -.546-1.387-1.333-1.756-1.333-1.756
+      -1.089-.745.084-.729.084-.729
+      1.205.084 1.84 1.236 1.84 1.236
+      1.07 1.835 2.807 1.305 3.492.998
+      .108-.776.418-1.305.762-1.605
+      -2.665-.3-5.467-1.332-5.467-5.93
+      0-1.31.468-2.38 1.235-3.22
+      -.135-.303-.54-1.523.105-3.176
+      0 0 1.005-.322 3.3 1.23
+      .96-.267 1.98-.399 3-.405
+      1.02.006 2.04.138 3 .405
+      2.28-1.552 3.285-1.23 3.285-1.23
+      .645 1.653.24 2.873.12 3.176
+      .765.84 1.23 1.91 1.23 3.22
+      0 4.61-2.805 5.625-5.475 5.92
+      .435.375.81 1.102.81 2.222
+      0 1.606-.015 2.896-.015 3.286
+      0 .315.21.69.825.57C20.565 21.795 
+      24 17.298 24 12c0-6.63-5.37-12-12-12z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </a>
 
@@ -75,7 +104,7 @@ const Footer = () => {
                 className="w-9 h-9 rounded-lg border border-white/10 bg-white/5 flex items-center justify-center hover:border-cyan-500/50 hover:bg-cyan-500/10 hover:text-cyan-400 transition-all duration-300"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.447 20.452h-3.554v-5.569..." />
+                  <path fillRule="evenodd" d="M19 0H5C2.239 0 0 2.239 0 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5V5c0-2.761-2.238-5-5-5zM8 19H5V8h3v11zM6.5 6.732c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zM20 19h-3v-5.604c0-3.368-4-3.113-4 0V19h-3V8h3v1.765c1.396-2.586 7-2.777 7 2.476V19z" clipRule="evenodd" />
                 </svg>
               </a>
 

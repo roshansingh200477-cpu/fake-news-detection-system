@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const NewsForm = () => {
   const [text, setText] = useState("");
   const [focused, setFocused] = useState(false);
-  const { detectNews, result, loading } = useContext(PredictionContext);
+  const { detectNews, loading } = useContext(PredictionContext);
   const { user } = useContext(AuthContext);
 
   const usedCount = parseInt(localStorage.getItem("guestDetections") || "0");
@@ -21,11 +21,8 @@ const NewsForm = () => {
     await detectNews(text);
   };
 
-  const isReal = result?.prediction?.toLowerCase().includes("real");
-  const isFake = result?.prediction?.toLowerCase().includes("fake");
-
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
+    <div className="flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
 
         {/* Header */}
@@ -139,35 +136,6 @@ const NewsForm = () => {
             </button>
           </form>
         </div>
-
-        {/* Result Card */}
-        {result && (
-          <div className={`mt-5 rounded-2xl border p-6 transition-all duration-500 animate-fade-in
-            ${isReal
-              ? "border-emerald-500/40 bg-emerald-500/10"
-              : isFake
-              ? "border-red-500/40 bg-red-500/10"
-              : "border-white/10 bg-white/5"
-            }`}
-          >
-            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3">
-              Prediction Result
-            </p>
-            <div className="flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl shrink-0
-                ${isReal ? "bg-emerald-500/20" : isFake ? "bg-red-500/20" : "bg-gray-700"}`}>
-                {isReal ? "✅" : isFake ? "🚨" : "🔍"}
-              </div>
-              <div>
-                <p className="text-gray-300 text-sm">This article is likely:</p>
-                <p className={`text-2xl font-black tracking-tight
-                  ${isReal ? "text-emerald-400" : isFake ? "text-red-400" : "text-yellow-400"}`}>
-                  {result.prediction}
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
 
       </div>
     </div>

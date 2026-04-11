@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react'
 import NewsForm from '../components/NewsForm'
 import PredictionResult from '../components/PredictionResult'
 import { AuthContext } from '../context/AuthContext'
-// import { Navigate } from 'react-router-dom'
 
 const floatingIcons = [
   { icon: "🔍", size: "text-5xl", x: 5,  y: 10, duration: 7,  delay: 0 },
@@ -28,7 +27,6 @@ const DetectNews = () => {
   }, []);
 
   if (loading) return null;
-  // if (!user) return <Navigate to="/Login" />;
 
   return (
     <div className="min-h-screen bg-[#0f172a] text-white overflow-hidden">
@@ -72,24 +70,7 @@ const DetectNews = () => {
         className="relative z-10"
         style={{ opacity: 0, animation: visible ? "fadeUp 0.7s ease forwards" : "none" }}
       >
-        {/* page header */}
-        <div className="text-center pt-16 pb-4 px-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold tracking-widest uppercase mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            AI Powered · Live Detection
-          </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-            Detect{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
-              Fake News
-            </span>
-          </h1>
-          <p className="mt-3 text-gray-500 text-base max-w-md mx-auto">
-            Paste any news article below and our ML model will analyze it instantly.
-          </p>
-        </div>
-
-        {/* form + result */}
+        {/* form + result — NewsForm has its own header so no duplicate here */}
         <NewsForm />
         <PredictionResult />
       </div>
