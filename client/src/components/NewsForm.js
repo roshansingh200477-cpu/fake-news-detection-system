@@ -1,10 +1,16 @@
 import { useContext, useState } from "react";
 import { PredictionContext } from "../context/PredictionContext";
+import { AuthContext } from "../context/AuthContext";
+import { Link } from "react-router-dom";
 
 const NewsForm = () => {
   const [text, setText] = useState("");
   const [focused, setFocused] = useState(false);
   const { detectNews, result, loading } = useContext(PredictionContext);
+  const { user } = useContext(AuthContext);
+
+  const usedCount = parseInt(localStorage.getItem("guestDetections") || "0");
+  const remaining = Math.max(0, 3 - usedCount);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,6 +20,7 @@ const NewsForm = () => {
     }
     await detectNews(text);
   };
+
   const isReal = result?.prediction?.toLowerCase().includes("real");
   const isFake = result?.prediction?.toLowerCase().includes("fake");
 
@@ -38,6 +45,26 @@ const NewsForm = () => {
           </p>
         </div>
 
+        {/* Guest free limit banner */}
+        {!user && (
+          <div className="mb-5 px-4 py-3 rounded-xl border border-yellow-500/30 bg-yellow-500/10 flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-yellow-400 text-lg">⚡</span>
+              <span className="text-yellow-300 text-xs font-semibold">
+                {remaining > 0
+                  ? `${remaining} free detection${remaining > 1 ? "s" : ""} remaining — sign up for unlimited access`
+                  : "Free limit reached — create an account to continue"}
+              </span>
+            </div>
+            <Link
+              to="/SignUp"
+              className="text-xs text-yellow-300 hover:text-white border border-yellow-500/40 hover:border-yellow-400 px-3 py-1.5 rounded-lg transition-all duration-200 whitespace-nowrap"
+            >
+              Sign up free →
+            </Link>
+          </div>
+        )}
+
         {/* Card */}
         <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm shadow-2xl shadow-black/50 p-6 transition-all duration-300">
 
@@ -45,9 +72,7 @@ const NewsForm = () => {
           <div
             className={`absolute inset-0 rounded-2xl transition-opacity duration-500 pointer-events-none ${
               focused ? "opacity-100" : "opacity-0"}`}
-            style={{
-              boxShadow: "0 0 60px rgba(52, 211, 153, 0.08)",
-            }}
+            style={{ boxShadow: "0 0 60px rgba(52, 211, 153, 0.08)" }}
           />
 
           <form onSubmit={handleSubmit} className="relative z-10">
@@ -89,7 +114,6 @@ const NewsForm = () => {
                   : "bg-gradient-to-r from-emerald-500 to-cyan-500 text-white hover:from-emerald-400 hover:to-cyan-400 hover:shadow-xl hover:shadow-emerald-500/25 hover:-translate-y-0.5 active:translate-y-0"
                 }`}
             >
-              {/* Shimmer on hover */}
               {!loading && (
                 <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out" />
               )}

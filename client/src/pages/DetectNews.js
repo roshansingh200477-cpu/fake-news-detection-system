@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import NewsForm from '../components/NewsForm'
 import PredictionResult from '../components/PredictionResult'
 import { AuthContext } from '../context/AuthContext'
-import { Navigate } from 'react-router-dom'
+// import { Navigate } from 'react-router-dom'
 
 const floatingIcons = [
   { icon: "🔍", size: "text-5xl", x: 5,  y: 10, duration: 7,  delay: 0 },
@@ -20,7 +20,7 @@ const floatingIcons = [
 ];
 
 const DetectNews = () => {
-  const { user, loading } = useContext(AuthContext);
+  const { loading } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {

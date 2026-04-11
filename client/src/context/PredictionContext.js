@@ -1,39 +1,56 @@
 import { createContext, useState } from "react";
 import { predictNews } from "../services/Api.js";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 export const PredictionContext = createContext();
+
+const FREE_LIMIT = 3;
+
 export const PredictionProvider = ({ children }) => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const detectNews = async (text) => {
-  try {
 
-    setLoading(true);
+    // guest free limit check
+    if (!user) {
+      const usedCount = parseInt(localStorage.getItem("guestDetections") || "0");
 
-    const res = await predictNews({
-      type: "text",
-      content: text
-    });
+      if (usedCount >= FREE_LIMIT) {
+        navigate("/SignUp");
+        return;
+      }
 
-    // Normalize the response here
-    setResult({
-      prediction: res.data?.data?.result || "Unknown",
-      confidence: res.data?.data?.confidence || null
-    });
+      localStorage.setItem("guestDetections", String(usedCount + 1));
+    }
 
-  } catch (error) {
+    try {
+      setLoading(true);
 
-    console.error("Prediction failed", error);
+      const res = await predictNews({
+        type: "text",
+        content: text
+      });
 
-  } finally {
+      setResult({
+        prediction: res.data?.data?.result || "Unknown",
+        confidence: res.data?.data?.confidence || null
+      });
 
-    setLoading(false);
+    } catch (error) {
+      console.error("Prediction failed", error);
 
-  }
-};
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <PredictionContext.Provider value={{result, loading, detectNews}}>
+    <PredictionContext.Provider value={{ result, loading, detectNews }}>
       {children}
     </PredictionContext.Provider>
   );

@@ -5,7 +5,7 @@ import About from './pages/About';
 import DetectNews from './pages/DetectNews';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import { Routes, BrowserRouter, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './context/AuthContext';
 import Footer from './components/Footer';
@@ -17,7 +17,6 @@ function App() {
   }
   return (
 // #0F172A
-      <BrowserRouter>
     <div className='bg-[#0F172A] min-h-screen'> 
       <NavBar/>
         <Routes>
@@ -29,7 +28,6 @@ function App() {
         </Routes>
         <Footer/>
     </div>
-      </BrowserRouter>
 
   );
 }
