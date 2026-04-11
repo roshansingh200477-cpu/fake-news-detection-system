@@ -1,27 +1,40 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+
+const floatingIcons = [
+  { icon: "🔍", size: "text-5xl", x: 5,  y: 10, duration: 7,  delay: 0 },
+  { icon: "📰", size: "text-6xl", x: 90, y: 8,  duration: 9,  delay: 1 },
+  { icon: "🧠", size: "text-4xl", x: 78, y: 65, duration: 8,  delay: 2 },
+  { icon: "⚡", size: "text-3xl", x: 12, y: 70, duration: 6,  delay: 0.5 },
+  { icon: "🔎", size: "text-7xl", x: 48, y: 3,  duration: 10, delay: 3 },
+  { icon: "📡", size: "text-4xl", x: 93, y: 40, duration: 7,  delay: 1.5 },
+  { icon: "🤖", size: "text-5xl", x: 3,  y: 42, duration: 9,  delay: 2.5 },
+  { icon: "📊", size: "text-3xl", x: 62, y: 88, duration: 8,  delay: 0.8 },
+  { icon: "🛡️", size: "text-4xl", x: 28, y: 85, duration: 7,  delay: 3.5 },
+  { icon: "💡", size: "text-3xl", x: 83, y: 80, duration: 6,  delay: 1.2 },
+  { icon: "🔬", size: "text-5xl", x: 20, y: 22, duration: 11, delay: 4 },
+  { icon: "📌", size: "text-3xl", x: 70, y: 28, duration: 8,  delay: 2 },
+];
 
 const Login = () => {
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const [visible, setVisible] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
   const [showPass, setShowPass] = useState(false);
 
   const set = (key) => (e) => setForm({ ...form, [key]: e.target.value });
 
+  useEffect(() => {
+    setTimeout(() => setVisible(true), 100);
+  }, []);
+
   // 🔹 Handle Login
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      await login({
-        email: form.email,
-        password: form.password
-      });
-
-      // redirect after successful login
+      await login({ email: form.email, password: form.password });
       navigate("/");
     } catch (error) {
       console.error("Login failed", error);
@@ -30,16 +43,55 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0f172a] flex items-center justify-center px-4 overflow-hidden">
 
-      <div className="absolute w-80 h-80 bg-cyan-500/5 rounded-full blur-3xl pointer-events-none" />
+      <style>{`
+        @keyframes float {
+          from { transform: translateY(0px) translateX(0px); opacity: 0.6; }
+          to   { transform: translateY(-28px) translateX(8px); opacity: 1; }
+        }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(30px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
 
-      <div className="relative w-full max-w-sm">
+      {/* floating emoji background */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {floatingIcons.map((item, i) => (
+          <div
+            key={i}
+            className={`absolute ${item.size} select-none`}
+            style={{
+              left: `${item.x}%`,
+              top: `${item.y}%`,
+              opacity: 0.07,
+              animation: `float ${item.duration}s ${item.delay}s ease-in-out infinite alternate`,
+              filter: "blur(0.5px)",
+            }}
+          >
+            {item.icon}
+          </div>
+        ))}
+      </div>
+
+      {/* background orbs */}
+      <div className="fixed top-20 left-10 w-72 h-72 bg-cyan-500/8 rounded-full blur-3xl pointer-events-none animate-pulse" />
+      <div className="fixed bottom-20 right-10 w-96 h-96 bg-blue-500/8 rounded-full blur-3xl pointer-events-none animate-pulse" style={{ animationDelay: "2s" }} />
+
+      {/* card */}
+      <div
+        className="relative z-10 w-full max-w-sm"
+        style={{ opacity: 0, animation: visible ? "fadeUp 0.7s ease forwards" : "none" }}
+      >
         <div className="bg-gray-900/80 backdrop-blur border border-white/10 rounded-2xl p-8 shadow-2xl shadow-black/60">
+
+          {/* top glow line */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent rounded-full" />
 
           {/* Header */}
           <div className="mb-8">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 mb-5 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-400 to-blue-500 mb-5 flex items-center justify-center shadow-lg shadow-cyan-500/20">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
               </svg>
