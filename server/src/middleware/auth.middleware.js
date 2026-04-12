@@ -3,7 +3,6 @@ import User from '../modules/auth/auth.model.js';
 
 const authMiddleware = async (req, res, next)=>{
     try{
-        // Get token and validate Header 
         const authHeader = req.headers.authorization; 
 
         if(!authHeader || !authHeader.startsWith("Bearer ")){
@@ -14,11 +13,8 @@ const authMiddleware = async (req, res, next)=>{
         }
         const token = authHeader.split(" ")[1];
 
-        // Verify the Token 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-        // Fetch the user in DB 
-        // lean() it makes query faster by returning the plain js instead of mongoose documents
         const user = await User.findById(decoded.id).select("-password").lean();
 
         if(!user){
@@ -27,17 +23,36 @@ const authMiddleware = async (req, res, next)=>{
                 message: "The user belong to this token is no longer exists",
             });
         }
-        // attach user to request 
         req.user = user;
-        // continue
         next();
     } catch(error){
         console.log("JWT ERROR TYPE:", error.name);
-  console.log("JWT ERROR MESSAGE:", error.message);
+        console.log("JWT ERROR MESSAGE:", error.message);
         return res.status(401).json({
             success: false,
             message: "Invalid or expired token.",
         });
+    }
+};
+
+export const optionalAuth = async (req, res, next) => {
+    try {
+        const authHeader = req.headers.authorization;
+
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+            req.user = null;
+            return next();
+        }
+
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id).select("-password").lean();
+        req.user = user || null;
+        next();
+
+    } catch (error) {
+        req.user = null;
+        next();
     }
 };
 

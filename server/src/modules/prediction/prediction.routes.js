@@ -5,17 +5,12 @@ import {
   deletePrediction
 } from "./prediction.controller.js";
 
-import authMiddleware from "../../middleware/auth.middleware.js";
+import authMiddleware, { optionalAuth } from "../../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Create a prediction
-router.post("/", authMiddleware, createPrediction);
-
-// Get logged-in user's predictions
+router.post("/", optionalAuth, createPrediction);
 router.get("/", authMiddleware, getUserPredictions);
-
-// Delete a prediction
 router.delete("/:id", authMiddleware, deletePrediction);
 
 export default router;

@@ -13,46 +13,38 @@ export const createPrediction = async (type, content, userId) => {
     let confidence = null;
 
     try {
-        // 🔥 CALL FASTAPI ML SERVICE
         const response = await axios.post(process.env.ML_API_URL, {
             text: processedText
         });
 
         console.log("ML RESPONSE:", response.data);
 
-        result = response.data.prediction;       // "Fake" or "Real"
-        confidence = response.data.confidence;   // e.g. 0.92
+        result = response.data.prediction;
+        confidence = response.data.confidence;
 
     } catch (error) {
         console.error("ML API ERROR:", error.message);
 
-        // fallback keyword detection
         const lowerText = processedText.toLowerCase();
 
         const fakeSignals = [
-            // sensational / urgency
             "breaking", "urgent", "shocking", "bombshell", "explosive",
             "exclusive", "just in", "developing", "alert", "watch now",
-            // share bait
             "share before deleted", "they don't want you to know",
             "mainstream media won't show", "spread the word",
             "share immediately", "before it's too late", "going viral",
             "banned", "censored", "must watch", "must read",
             "won't show you this", "before they delete",
-            // exaggeration
             "what they're hiding", "cover up", "cover-up",
             "hidden truth", "they exposed", "obliterate",
             "savage", "rip apart", "slam",
-            // emotional triggers
             "outrage", "disgusting", "traitor", "corrupt politician",
             "rigged", "it's a hoax", "complete fraud", "criminal elite",
             "radical agenda", "deep state", "puppet government",
             "globalist", "regime", "invasion", "they are lying",
-            // fake credibility
             "sources say", "insiders claim", "anonymous source confirms",
             "many people are saying", "scientists confirm",
             "according to sources close",
-            // conspiracy / clickbait
             "illuminati", "new world order", "microchip",
             "5g causes", "they are poisoning", "miracle cure",
             "doctors don't want you", "big pharma hiding",
@@ -70,30 +62,32 @@ export const createPrediction = async (type, content, userId) => {
             "verified by", "fact checked", "peer reviewed",
         ];
 
-        let fakeScore = fakeSignals.filter(signal => lowerText.includes(signal)).length;
-        let realScore = realSignals.filter(signal => lowerText.includes(signal)).length;
-
+        const fakeScore = fakeSignals.filter(signal => lowerText.includes(signal)).length;
+        const realScore = realSignals.filter(signal => lowerText.includes(signal)).length;
         const netScore = fakeScore - realScore;
         result = netScore >= 1 ? "Fake" : "Real";
     }
 
-    const prediction = await Prediction.create({
-        user: userId,
-        type,
-        content: processedText,
-        result,
-        confidence
-    });
+    // only save to DB if user is logged in
+    if (userId) {
+        const prediction = await Prediction.create({
+            user: userId,
+            type,
+            content: processedText,
+            result,
+            confidence
+        });
+        return prediction;
+    }
 
-    return prediction;
+    // guest — return result without saving
+    return { result, confidence };
 };
 
-// Get User Prediction
 export const getUserPredictions = async(userId)=>{
     return await Prediction.find({user: userId}).sort({createdAt: -1});
 };
 
-// Deleting the Predicton
 export const deletePrediction = async (predictionId, userId) =>{
     const prediction = await Prediction.findOne({
         _id: predictionId,
