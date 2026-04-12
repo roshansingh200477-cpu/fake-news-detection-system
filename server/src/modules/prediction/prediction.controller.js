@@ -1,13 +1,12 @@
 import * as predictionService from "./prediction.service.js";
 import apiResponse from "./../../utils/apiResponse.js";
 
-// Create a new Predcitons
-export const createPrediction = async (req, res, next)=>{
+// Create a new Prediction
+export const createPrediction = async (req, res, next) => {
     try {
         const { type, content } = req.body;
 
-        // basic validation 
-        if(!type || !content){
+        if (!type || !content) {
             return apiResponse.error(res, "Type and content are required", 400);
         }
         if (typeof content !== "string") {
@@ -15,28 +14,29 @@ export const createPrediction = async (req, res, next)=>{
                 success: false,
                 message: "Content must be a string"
             });
-            }
-            console.log("REQ BODY:", req.body);
-console.log("CONTENT TYPE:", typeof req.body.content);
+        }
 
-        // user come
-        const userId = req.user._id;
+        console.log("REQ BODY:", req.body);
+        console.log("CONTENT TYPE:", typeof req.body.content);
+
+        // guests have no user — pass null for userId
+        const userId = req.user ? req.user._id : null;
 
         const result = await predictionService.createPrediction(
             type,
             content,
             userId
         );
-        
-        return apiResponse.success(res, "Predction Created successfully", result);
+
+        return apiResponse.success(res, "Prediction Created successfully", result);
 
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 
-// Get Users prediction 
-export const getUserPredictions = async (req, res, next)=>{
+// Get Users prediction
+export const getUserPredictions = async (req, res, next) => {
     try {
         const userId = req.user._id;
         const predictions = await predictionService.getUserPredictions(userId);
@@ -48,14 +48,14 @@ export const getUserPredictions = async (req, res, next)=>{
         );
 
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 
-// Delete prediction 
-export const deletePrediction = async (req, res, next)=>{
+// Delete prediction
+export const deletePrediction = async (req, res, next) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const userId = req.user._id;
 
         await predictionService.deletePrediction(id, userId);
@@ -66,8 +66,6 @@ export const deletePrediction = async (req, res, next)=>{
         );
 
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
-
-
