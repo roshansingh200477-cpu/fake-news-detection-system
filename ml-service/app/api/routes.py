@@ -8,22 +8,20 @@ router = APIRouter(
 
 @router.get("/health")
 def health_check():
-    # Health check the endpoint to verify the ML service is running.
-    return {"status" : "ML service is running"}
+    return {"status": "ML service is running"}
 
 @router.post("/predict")
 def predict(request: PredictionRequest):
-    # Predict whethed the News is fake or real
     try:
-        prediction = predict_news(request.text)
+        result = predict_news(request.text)
 
         return {
-            "success" : True,
-            "prediction": prediction
+            "success": True,
+            "prediction": result["prediction"],
+            "confidence": result["confidence"]
         }
-    except Exception as e: 
+    except Exception as e:
         raise HTTPException(
             status_code=500,
             detail=f"Prediction failed: {str(e)}"
-
         )

@@ -16,7 +16,6 @@ export const PredictionProvider = ({ children }) => {
 
   const detectNews = async (text) => {
 
-    // guest free limit check
     if (!user) {
       const usedCount = parseInt(localStorage.getItem("guestDetections") || "0");
 
@@ -37,8 +36,8 @@ export const PredictionProvider = ({ children }) => {
       });
 
       setResult({
-        prediction: res.data?.data?.result || "Unknown",
-        confidence: res.data?.data?.confidence || null
+        prediction: res.data?.data?.result || res.data?.data?.prediction || "Unknown",
+        confidence: res.data?.data?.confidence ?? null
       });
 
     } catch (error) {
